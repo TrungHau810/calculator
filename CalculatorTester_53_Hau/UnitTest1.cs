@@ -7,6 +7,8 @@ namespace CalculatorTest_53_Hau
     [TestClass]
     public class UnitTest1
     {
+        public TestContext TestContext { get; set; }
+
         private Calculation_53_Hau c_53_Hau;    //Class Calcution_53_Hau phải là public
         [TestInitialize]
         // Set up dữ liệu dùng chung cho các TC
@@ -100,7 +102,7 @@ namespace CalculatorTest_53_Hau
         //Viết TC9: Phép chia, nhận 2 số a = 12, b = 2 => Kết quả = 24
         [TestMethod]
         [ExpectedException(typeof(DivideByZeroException))]
-        public void TC9_51_Hau_Chia_Fail()
+        public void TC9_53_Hau_Chia_Fail()
         {
             int expected_53_Hau, actual_53_Hau;
             expected_53_Hau = 5;
@@ -108,6 +110,45 @@ namespace CalculatorTest_53_Hau
             Assert.AreEqual(expected_53_Hau, actual_53_Hau);
 
         }
+
+        //Đọc file csv 3 cột
+        [DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", 
+            @".\Data_53_Hau\DataTest_53_Hau.csv", "DataTest_53_Hau#csv", 
+            DataAccessMethod.Sequential)]
+        //Testcase10: Phép cộng - 4 Pass
+        [TestMethod]
+        public void TC10_53_Hau_TestWithDataSource_4Pass()
+        {
+            int a_53_Hau = int.Parse(TestContext.DataRow[0].ToString());    //Đọc giá trị a (cột 1)
+            int b_53_Hau = int.Parse(TestContext.DataRow[1].ToString());    //Đọc giá trị b (cột 2)
+            int expected_53_Hau = int.Parse(TestContext.DataRow[2].ToString());     //Đọc kết quả mong muốn (cột 3)
+
+            Calculation_53_Hau cal_53_Hau = new Calculation_53_Hau(a_53_Hau, b_53_Hau);
+            int actual_53_Hau = cal_53_Hau.Execute_53_Hau("+"); //Mặc định phép cộng
+            Assert.AreEqual(expected_53_Hau, actual_53_Hau);
+        }
+
+
+        //Đọc file csv 4 cột - file DataTest_53_Hau_4Cols
+        [DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV",
+            @".\Data_53_Hau\DataTest_53_Hau_4Cols.csv", "DataTest_53_Hau_4Cols#csv",
+            DataAccessMethod.Sequential)]
+
+        //Testcase11:Đọc file csv - 4 phép tính
+        [TestMethod]
+        public void TC11_53_Hau_TestWithDataSource_4Cols_4Pass()
+        {
+            int a_53_Hau = int.Parse(TestContext.DataRow[0].ToString());    //Lấy số a
+            int b_53_Hau = int.Parse(TestContext.DataRow[1].ToString());    //Lấy số b
+            string calSymbol_53_Hau = TestContext.DataRow[2].ToString();    //Lấy dấu phép tính
+            calSymbol_53_Hau = calSymbol_53_Hau.Replace("'", "");           //Bỏ kí tự ' trong calSymbol
+            int expected_53_Hau = int.Parse(TestContext.DataRow[3].ToString()); //Lấy giá trị mong muốn
+
+            Calculation_53_Hau cal_53_Hau = new Calculation_53_Hau(a_53_Hau, b_53_Hau);
+            int actual_53_Hau = cal_53_Hau.Execute_53_Hau(calSymbol_53_Hau);    //Tính toán 
+            Assert.AreEqual(expected_53_Hau, actual_53_Hau);
+        }
+
 
     }
 }
